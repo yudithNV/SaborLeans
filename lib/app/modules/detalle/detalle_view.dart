@@ -15,8 +15,11 @@ class DetalleView extends GetView<DetalleController> {
         title: const Text('Detalles del Plato'),
         leading: GestureDetector(
           onTap: () => Get.back(),
-          child: Icon(Icons.arrow_back_ios_new,
-              size: 18, color: AppColors.textDark),
+          child: Icon(
+            Icons.arrow_back_ios_new,
+            size: 18,
+            color: AppColors.textDark,
+          ),
         ),
       ),
       body: Obx(
@@ -24,26 +27,33 @@ class DetalleView extends GetView<DetalleController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // imagen hero
               Container(
                 width: double.infinity,
                 height: 240,
                 color: AppColors.primarySoft,
-                child: Icon(
-                  Icons.restaurant,
-                  size: 80,
-                  color: AppColors.primary.withOpacity(0.3),
-                ),
+                child: controller.imagenUrl.value.isEmpty
+                    ? Icon(
+                        Icons.restaurant,
+                        size: 80,
+                        color: AppColors.primary.withOpacity(0.3),
+                      )
+                    : Image.network(
+                        controller.imagenUrl.value,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Icon(
+                          Icons.restaurant,
+                          size: 80,
+                          color: AppColors.primary.withOpacity(0.3),
+                        ),
+                      ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // nombre y origen
                     Text(
-                      (controller.platoData['nombre'] ?? '').toString(),
+                      controller.nombre.value,
                       style: GoogleFonts.fraunces(
                         fontSize: 26,
                         fontWeight: FontWeight.w700,
@@ -51,39 +61,24 @@ class DetalleView extends GetView<DetalleController> {
                         letterSpacing: -0.3,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Icon(Icons.location_on_outlined,
-                            size: 14, color: AppColors.textMedium),
-                        const SizedBox(width: 4),
-                        Text(
-                          (controller.platoData['origen'] ?? '').toString(),
-                          style: TextStyle(
-                              fontSize: 13, color: AppColors.textMedium),
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 24),
-
-                    // indicadores
                     Row(
                       children: [
                         _indicador(
                           Icons.local_fire_department_outlined,
-                          (controller.platoData['calorias'] ?? '').toString(),
-                          'Calorías',
+                          '${controller.calorias.value} kcal',
+                          'Calorias',
                         ),
                         const SizedBox(width: 12),
                         _indicador(
                           Icons.fitness_center_outlined,
-                          (controller.platoData['proteinas'] ?? '').toString(),
-                          'Proteínas',
+                          '-',
+                          'Proteinas',
                         ),
                         const SizedBox(width: 12),
                         _indicador(
                           Icons.access_time_outlined,
-                          (controller.platoData['tiempo'] ?? '').toString(),
+                          '-',
                           'Tiempo',
                         ),
                       ],
@@ -92,8 +87,6 @@ class DetalleView extends GetView<DetalleController> {
                   ],
                 ),
               ),
-
-              // tabs
               DefaultTabController(
                 length: 2,
                 child: Column(
@@ -104,7 +97,9 @@ class DetalleView extends GetView<DetalleController> {
                       labelColor: AppColors.primary,
                       unselectedLabelColor: AppColors.textMedium,
                       labelStyle: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w500),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                       tabs: const [
                         Tab(text: 'Ingredientes'),
                         Tab(text: 'Historia'),
@@ -163,6 +158,7 @@ class DetalleView extends GetView<DetalleController> {
   Widget _ingredientesTab() {
     final ingredientes =
         controller.platoData['ingredientes'] as List<dynamic>? ?? [];
+
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       itemCount: ingredientes.length,
@@ -178,14 +174,14 @@ class DetalleView extends GetView<DetalleController> {
                   color: AppColors.secondaryLight,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.check,
-                    size: 15, color: AppColors.secondary),
+                child: Icon(Icons.check, size: 15, color: AppColors.secondary),
               ),
               const SizedBox(width: 14),
-              Text(
-                ingredientes[index] as String,
-                style: TextStyle(
-                    fontSize: 14, color: AppColors.textDark),
+              Expanded(
+                child: Text(
+                  ingredientes[index].toString(),
+                  style: TextStyle(fontSize: 14, color: AppColors.textDark),
+                ),
               ),
             ],
           ),
@@ -198,7 +194,7 @@ class DetalleView extends GetView<DetalleController> {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       child: Text(
-        (controller.platoData['historia'] ?? '').toString(),
+        controller.historia.value,
         style: TextStyle(
           fontSize: 14,
           height: 1.7,

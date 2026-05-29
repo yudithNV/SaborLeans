@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   google_fonts: ^6.2.1
+  http: ^1.2.2
+  http_parser: ^4.1.2
   image_picker: ^1.1.2
   flutter:
     sdk: flutter

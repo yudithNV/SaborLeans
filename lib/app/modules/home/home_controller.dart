@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../detalle/detalle_controller.dart';
 import '../../routes/app_routes.dart';
 
 class HomeController extends GetxController {
@@ -17,12 +18,18 @@ class HomeController extends GetxController {
   Future<void> _abrirImagen(ImageSource source) async {
     final XFile? imagen = await _picker.pickImage(source: source);
 
-    if (imagen == null) return; // usuario canceló
+    if (imagen == null) return; // usuario cancelo
 
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2)); // simula la IA
+    final detalleController = Get.isRegistered<DetalleController>()
+        ? Get.find<DetalleController>()
+        : Get.put(DetalleController());
+
+    final identificado = await detalleController.identificarPlato(imagen);
     isLoading.value = false;
 
-    Get.toNamed(AppRoutes.detalle);
+    if (identificado) {
+      Get.toNamed(AppRoutes.detalle);
+    }
   }
 }

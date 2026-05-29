@@ -4,6 +4,8 @@ import 'detalle_controller.dart';
 class DetalleBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<DetalleController>(() => DetalleController());
+    if (!Get.isRegistered<DetalleController>()) {
+      Get.lazyPut<DetalleController>(() => DetalleController());
+    }
   }
 }
