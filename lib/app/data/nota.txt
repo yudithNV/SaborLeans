@@ -1,0 +1,9 @@
+La estructura típica sería:
+lib/app/data/
+  models/
+    plato_model.dart
+  providers/
+    ia_provider.dart
+
+plato_model.dart — la clase que define cómo se ve un plato (nombre, calorías, ingredientes, etc.)
+ia_provider.dart — donde irá la llamada al modelo
